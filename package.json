@@ -1,0 +1,22 @@
+{
+  "name": "ai-diet-plan-google-gemini",
+  "version": "1.0.0",
+  "description": "Generate Diet Plan Using Google Gemini",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node mealPlanner.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "google",
+    "gemini",
+    "ai"
+  ],
+  "author": "Gaurav Kumar",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.4.5"
+  }
+}
