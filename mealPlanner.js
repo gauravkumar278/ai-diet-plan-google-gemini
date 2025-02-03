@@ -40,7 +40,7 @@ const responseSchema = {
                                     "type": "string",
                                     "description": "The unit of measurement for the ingredient (e.g., 'g', 'kg', 'unit', 'dozen')"
                                 },
-                                "state": {
+                                "cooked_state": {
                                     "type": "string",
                                     "enum": [
                                         "cooked",
@@ -48,7 +48,7 @@ const responseSchema = {
                                     ],
                                     "description": "The state of the ingredient (cooked or uncooked)"
                                 },
-                                "macros": {
+                                "nutritionalInfo": {
                                     "type": "object",
                                     "description": "Macro breakdown for the ingredient",
                                     "properties": {
@@ -59,10 +59,10 @@ const responseSchema = {
                                     "required": ["protein", "fat", "carbs"]
                                 }
                             },
-                            "required": ["name", "quantity", "unit", "macros"]
+                            "required": ["name", "quantity", "unit", "cooked_state", "nutritionalInfo"]
                         }
                     },
-                    "macros": {
+                    "totalNutritionalInfo": {
                         "type": "object",
                         "description": "Total macro breakdown for the meal",
                         "properties": {
@@ -81,20 +81,19 @@ const responseSchema = {
                         }
                     }
                 },
-                "required": ["name", "ingredients", "macros", "cookingInstructions"]
+                "required": ["name", "ingredients", "totalNutritionalInfo", "cookingInstructions"]
             }
         }
     },
     "required": ["mealType", "meals"]
 };
 
-async function generateMeal(userInput) {
+async function generateMeal(userInput, availableIngredients) {
     try {
         const {
             dietType,
             macrosPerMeal,
             mealTypes,
-            availableIngredients,
             restrictedIngredients,
             restrictedMeals,
             festivalCuisine,
@@ -123,7 +122,7 @@ async function generateMeal(userInput) {
         console.log("userPrompt", userPrompt);
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: process.env.GEMINI_MODEL,
             systemInstruction: systemPrompt
         });
 
@@ -156,7 +155,7 @@ async function generateMeal(userInput) {
         });
 
         let result = await chat.sendMessage(userPrompt);
-        //console.log("result", result);
+        console.log("result", result.response.text());
         const generatedMeals = JSON.parse(result.response.text());
         //console.log("generatedMeals", generatedMeals);
         return generatedMeals;

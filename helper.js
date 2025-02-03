@@ -1,7 +1,6 @@
 
 const normalizeIngredients = (ingredients, mealType) => {
-    const filteredIngredients = filterIngredientsByMealType(ingredients, mealType);
-    const newIngredients = convertIngredientstoGORML(filteredIngredients);
+    const newIngredients = convertIngredientstoGORML(ingredients);
     const ingredientsJSON = formatIngredients(newIngredients);
     return ingredientsJSON;
 }
@@ -13,8 +12,7 @@ const formatIngredients = (normalizeIngredient) => {
             quantity: ingredient.quantity,
             unit: ingredient.unit,
             nutritionalInfo: ingredient.nutritionalInfo,
-            price: ingredient.price,
-            mealType: ingredient.mealType[0]
+            price: ingredient.price
         }))
     );
     return ingredientJSON;
@@ -42,23 +40,7 @@ const convertIngredientstoGORML = (ingredients) => {
     });
 }
 
-const filterIngredientsByMealType = (ingredients, mealType) => {
-    /**
-       * Filters ingredients based on the specified mealType.
-       * 
-       * @param {Array} ingredients - Array of ingredient objects.
-       * @param {String} mealType - The meal type to filter by (e.g., "Breakfast", "Lunch/Dinner").
-       * @returns {Array} - Array of filtered ingredients matching the mealType.
-       */
-    if (mealType == "Lunch" || "Dinner") {
-        mealType = "Lunch/Dinner";
-    }
-
-    return ingredients.filter(ingredient =>
-        ingredient.mealType && ingredient.mealType.includes(mealType)
-    );
-}
-
 export {
-    normalizeIngredients
+    normalizeIngredients,
+    convertIngredientstoGORML
 }

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import ingredients from "./ingredients.js"; // Import your ingredients.js file
+import getIngredients from "./ingredients.js"; // Import your ingredients.js file
 import { generateMeal } from "./mealPlanner.js";
 // Example user input
 const userInput = {
@@ -7,7 +7,6 @@ const userInput = {
     macrosPerMeal: {
         Lunch: { protein: 57, fat: 26, carbs: 76 },
     },
-    availableIngredients: ingredients,
     restrictedIngredients: ["Pork", "Beef"],
     restrictedMeals: ["Smoothie", "Juice"],
     festivalCuisine: {
@@ -34,7 +33,8 @@ const userInput = {
 // Run the analysis
 (async () => {
     try {
-        const result = await generateMeal(userInput);
+        const ingredients = await getIngredients(userInput.mealTypes[0]);
+        const result = await generateMeal(userInput, ingredients);
         //console.log("result", result);
         console.log(JSON.stringify(result, null, 4));
     } catch (error) {
